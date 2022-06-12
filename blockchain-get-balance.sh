@@ -8,7 +8,7 @@ curl --location --request POST 'localhost:8545' \
     "id": 4,
     "method": "eth_getBalance",
     "params": [
-        "0xa02d3df2eb976cead15dfce8b54349d073bc65e9",
+        "0xc0c492246c48f26f23e84bd2168c08caaae33a6a",
         "latest"
     ]
 }'

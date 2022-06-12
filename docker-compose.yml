@@ -1,3 +1,5 @@
+# ref: https://medium.com/scb-digital/running-a-private-ethereum-blockchain-using-docker-589c8e6a4fe8
+
 version: '3.7'
 
 services:
@@ -10,12 +12,15 @@ services:
       context: .
       args:
         - ACCOUNT_PASSWORD=${ACCOUNT_PASSWORD}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      # - ./data/boot:/root/.ethereum
     command:
-      --nodekeyhex="b0ac22adcad37213c7c565810a50f1772291e7b0ce53fb73e7ec2a3c75bc13b5"
+      --nodekeyhex=${NODE_KEY_HEX}
       --nodiscover
       --ipcdisable
       --networkid=${NETWORK_ID}
-      --netrestrict="172.16.254.0/28"
+      --netrestrict=${NETRESTRICT}
     networks:
       priv-eth-net:
 
@@ -26,20 +31,27 @@ services:
     image: geth-client
     depends_on:
       - geth-bootnode
-
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      # - ./data/rpc:/root/.ethereum
     # --allow-insecure-unlock is for dev only. remove it for production.
     # allow unlocking the account we created over the http. unsafe.
     command:
-      --bootnodes="enode://af22c29c316ad069cf48a09a4ad5cf04a251b411e45098888d114c6dd7f489a13786620d5953738762afa13711d4ffb3b19aa5de772d8af72f851f7e9c5b164a@geth-bootnode:30303"
+      --bootnodes=${BOOT_NODE}
       --allow-insecure-unlock
       --http
       --http.addr="0.0.0.0"
-      --http.api="eth,web3,net,admin,personal"
+      --http.api="eth,web3,net,admin,personal,db,debug,net,miner,txpool,clique"
       --http.corsdomain="*"
       --networkid=${NETWORK_ID}
-      --netrestrict="172.16.254.0/28"
+      --netrestrict=${NETRESTRICT}
+      --ws
+      --ws.port=8546
+      --ws.addr=0.0.0.0
+      --ws.origins="*"
+      --ws.api="admin,db,eth,miner,web3,net,personal,txpool,debug"
     ports:
-      - "8545:8545"
+      - 8545:8545
     networks:
       priv-eth-net:
 
@@ -50,12 +62,15 @@ services:
     image: geth-client
     depends_on:
       - geth-bootnode
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      # - ./data/miner:/root/.ethereum
     command:
-      --bootnodes="enode://af22c29c316ad069cf48a09a4ad5cf04a251b411e45098888d114c6dd7f489a13786620d5953738762afa13711d4ffb3b19aa5de772d8af72f851f7e9c5b164a@geth-bootnode:30303"
+      --bootnodes=${BOOT_NODE}
       --mine
       --miner.threads=1
       --networkid=${NETWORK_ID}
-      --netrestrict="172.16.254.0/28"
+      --netrestrict=${NETRESTRICT}
     networks:
       priv-eth-net:
 
@@ -64,4 +79,4 @@ networks:
     driver: bridge
     ipam:
       config:
-      - subnet: 172.16.254.0/28
+      - subnet: ${NETRESTRICT}

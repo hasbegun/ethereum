@@ -2,36 +2,30 @@
 # $ docker build --build-arg "USER=someuser" --tag test .
 # $ docker run --rm test
 
-FROM alpine:3.15
+FROM ethereum/client-go:latest
 
 ARG USER=appuser
-ARG ACCOUNT_PASSWORD=passW0rd!#%
+ARG ACCOUNT_PASSWORD=5uper53cr3t
 ENV HOME /home/$USER
 
-RUN apk add --no-cache git make musl-dev bash go geth nodejs npm python3
+RUN apk add --no-cache git bash python3
 RUN ln -s /usr/bin/python3 /usr/bin/python
 # dev image only
 RUN apk add --update sudo
 ###
 
-RUN npm i -g solc
+# RUN npm i -g solc
 # RUN npm i -g truffle
 # RUN npm i -g ganache
 
-# Configure Go
-ENV GOROOT /usr/lib/go
-ENV GOPATH /usr/local/go
-ENV PATH /usr/local/go/bin:$PATH
-RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
 # Install Glide
-RUN go get -u github.com/Masterminds/glide/...
-
+# RUN go get -u github.com/Masterminds/glide/...
 
 # Generate a new account for the ethereum blockchain
 # WARN: DO NOT SHARE THE PASSWROD! DO NOT FOGET PASSWORD.
-RUN echo ${ACCOUNT_PASSWORD} > /tmp/password && \
-   geth account new --password /tmp/password \
-   && rm -f /tmp/password
+# RUN echo ${ACCOUNT_PASSWORD} > /tmp/password && \
+#    geth account new --password /tmp/password \
+#    && rm -f /tmp/password
 
 # User config for dev
 RUN adduser -D $USER \
