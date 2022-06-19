@@ -15,13 +15,13 @@ Run an ethereum private network
 4. docker compose up
 By default, only the first three nodes defined in the addresses array will be allowed to seal. To allow a new node to participate the network, that node needs to be proposed and voted in by 50% + 1 node. To do this, you can run in sequence:
 
-docker-compose exec -T sealer-one geth --exec 'clique.propose("0x0d1d4e623d10f9fba5db95830f7d3839406c6af2", true)' attach
-docker-compose exec -T sealer-two geth --exec 'clique.propose("0x0d1d4e623d10f9fba5db95830f7d3839406c6af2", true)' attach
+docker-compose exec -T sealer-one geth --exec 'clique.propose("0xPublicAddress1", true)' attach
+docker-compose exec -T sealer-two geth --exec 'clique.propose("0xPublicAddress2", true)' attach
 At this point, the fourth node should be allowed to seal. To allow the fifth node to seal, you can run the following commands:
 
-docker-compose exec -T sealer-one geth --exec 'clique.propose("0x2932b7a2355d6fecc4b5c0b6bd44cc31df247a2e", true)' attach
-docker-compose exec -T sealer-two geth --exec 'clique.propose("0x2932b7a2355d6fecc4b5c0b6bd44cc31df247a2e", true)' attach
-docker-compose exec -T sealer-four geth --exec 'clique.propose("0x2932b7a2355d6fecc4b5c0b6bd44cc31df247a2e", true)' attach
+docker-compose exec -T sealer-one geth --exec 'clique.propose("0xPublicAddress1", true)' attach
+docker-compose exec -T sealer-two geth --exec 'clique.propose("0xPublicAddress2", true)' attach
+docker-compose exec -T sealer-four geth --exec 'clique.propose("0xPublicAddress3", true)' attach
 At this point, the fifth node should start being able to seal blocks as well.
 
 At any time, you can retrieve the list of authorized sealers by running:
