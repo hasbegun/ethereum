@@ -13,6 +13,7 @@ services:
       - ./scripts:/opt/scripts/:ro
       - ./config:/opt/config/:ro
       - /etc/localtime:/etc/localtime:ro
+      - ./data/bootnode:/opt/ethereum:rw
     command: /opt/scripts/bootnode.sh
     networks:
       priv-eth-net:
@@ -32,7 +33,8 @@ services:
       - ./scripts:/opt/scripts/:ro
       - ./config:/opt/config/:ro
       - /etc/localtime:/etc/localtime:ro
-    command: /opt/scripts/node.sh 0x0d2B767809d5dd9a62CAD1DA22Ac9401147cC1f0
+      - ./data/node:/opt/ethereum:rw
+    command: /opt/scripts/node.sh
     networks:
       priv-eth-net:
 
@@ -48,6 +50,7 @@ services:
       - ./scripts:/opt/scripts/:ro
       - ./config:/opt/config/:ro
       - /etc/localtime:/etc/localtime:ro
+      - ./data/sealer:/opt/ethereum:rw
     command: /opt/scripts/sealer.sh 0x0d2B767809d5dd9a62CAD1DA22Ac9401147cC1f0
     networks:
       priv-eth-net:

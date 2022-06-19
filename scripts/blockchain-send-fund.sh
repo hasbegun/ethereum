@@ -1,4 +1,4 @@
-echo "make sure hash values for from and to."
+echo "send fund"
 echo
 
 curl --location --request POST 'localhost:8545' \
@@ -9,9 +9,9 @@ curl --location --request POST 'localhost:8545' \
     "method": "eth_sendTransaction",
     "params": [
         {
-            "from": "0x08d1f47128f5c04d7a4aee69e90642645059acd6",
-            "to": "0x2bc05c71899ecff51c80952ba8ed444796499118",
-            "value": "0xf4240"
+            "from": "0x0d2b767809d5dd9a62cad1da22ac9401147cc1f0",
+            "to": "0x70d3908dbf2d4b16ddc3d0a957667f31a62af857",
+            "value": "0x32"
         }
     ]
 }'
