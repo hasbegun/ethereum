@@ -1,0 +1,27 @@
+{
+  "config": {
+    "chainId": ${GEN_CHAIN_ID},
+    "homesteadBlock": 0,
+    "eip150Block": 0,
+    "eip155Block": 0,
+    "eip158Block": 0,
+    "byzantiumBlock": 0,
+    "constantinopleBlock": 0,
+    "petersburgBlock": 0,
+    "istanbulBlock": 40000,
+    "clique": {
+      "period": 5,
+      "epoch": 30000
+    }
+  },
+  "difficulty" : "0x1",
+  "extraData"  : "0x0000000000000000000000000000000000000000000000000000000000000000${ACCT1}0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+  "gasLimit"   : "8000000",
+  "alloc"      : {
+    "${ACCT1}": { "balance": "500000"},
+    "${ACCT2}": { "balance": "500000"},
+    "${ACCT3}": { "balance": "500000"},
+    "${ACCT4}": { "balance": "500000"},
+    "${ACCT5}": { "balance": "500000"}
+  }
+}

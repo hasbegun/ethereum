@@ -1,0 +1,60 @@
+version: "3"
+
+services:
+  # The bootnode is the rendez-vous point for all other nodes.
+  eth-bootnode:
+    image: ethereum/client-go:alltools-v1.10.18
+    env_file:
+      - .env
+    restart: unless-stopped
+    ports:
+      - 30303:30303
+    volumes:
+      - ./scripts:/opt/scripts/:ro
+      - ./config:/opt/config/:ro
+      - /etc/localtime:/etc/localtime:ro
+    command: /opt/scripts/bootnode.sh
+    networks:
+      priv-eth-net:
+
+  # The node container is our entry point to issue RPC commands
+  # but it's not sealing.
+  eth-node:
+    image: ethereum/client-go:alltools-v1.10.18
+    env_file:
+      - .env
+    restart: unless-stopped
+    depends_on:
+      - eth-bootnode
+    ports:
+      - 8544-8546:8544-8546
+    volumes:
+      - ./scripts:/opt/scripts/:ro
+      - ./config:/opt/config/:ro
+      - /etc/localtime:/etc/localtime:ro
+    command: /opt/scripts/node.sh 0x0d2B767809d5dd9a62CAD1DA22Ac9401147cC1f0
+    networks:
+      priv-eth-net:
+
+  # Miner nodes are workers that commit blocks constantly.
+  eth-sealer:
+    image: ethereum/client-go:alltools-v1.10.18
+    env_file:
+      - .env
+    restart: unless-stopped
+    depends_on:
+      - eth-node
+    volumes:
+      - ./scripts:/opt/scripts/:ro
+      - ./config:/opt/config/:ro
+      - /etc/localtime:/etc/localtime:ro
+    command: /opt/scripts/sealer.sh 0x0d2B767809d5dd9a62CAD1DA22Ac9401147cC1f0
+    networks:
+      priv-eth-net:
+
+networks:
+  priv-eth-net:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: ${NETRESTRICT}

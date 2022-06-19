@@ -1,20 +1,16 @@
-# usage:
-# $ docker build --build-arg "USER=someuser" --tag test .
-# $ docker run --rm test
+# FROM ethereum/client-go:latest
 
-FROM ethereum/client-go:latest
+FROM alpine:3.15.0
 
 ARG USER=appuser
-ARG ACCOUNT_PASSWORD=5uper53cr3t
 ENV HOME /home/$USER
 
-RUN apk add --no-cache git bash python3
+RUN apk add --no-cache go \
+   geth nodejs npm openssh \
+   git sudo python3 bash bash-completion
 RUN ln -s /usr/bin/python3 /usr/bin/python
-# dev image only
-RUN apk add --update sudo
-###
 
-# RUN npm i -g solc
+RUN npm i -g solc
 # RUN npm i -g truffle
 # RUN npm i -g ganache
 
@@ -38,4 +34,4 @@ RUN adduser -D $USER \
 USER $USER
 WORKDIR $HOME
 
-CMD ["/bin/bash"]
+CMD [ "/bin/bash" ]

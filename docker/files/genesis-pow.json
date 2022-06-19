@@ -10,7 +10,7 @@
      "petersburgBlock": 0,
      "ethash": {}
    },
-   "difficulty": "20",
+   "difficulty": "400",
    "gasLimit": "12000000",
    "alloc": {}
  }
