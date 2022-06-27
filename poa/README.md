@@ -5,7 +5,7 @@ Run an ethereum private network
    Outputs are config/accounts
 
 2. Create genesis.json
-   >> ./gnesis.sh
+   >> ./gnesis.**sh**
    genesis.json can be found at config.
 
 3. Create bootnode key
@@ -32,3 +32,7 @@ To vote a node out of the network, you can use the same commands as described be
 DOTO:
 1. genesis.sh uses fixed account info. Need to fetch this info from config/accounts
 2. node.sh and sealer.sh use fixed "enode:xxxx" value. Need to fetch this info dynamically.
+
+
+ref: https://github.com/tableturn/geth-private-poa
+https://medium.com/scb-digital/running-a-private-ethereum-blockchain-using-docker-589c8e6a4fe8

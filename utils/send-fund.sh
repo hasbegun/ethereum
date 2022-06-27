@@ -11,7 +11,9 @@ curl --location --request POST 'localhost:8545' \
         {
             "from": "0x0d2b767809d5dd9a62cad1da22ac9401147cc1f0",
             "to": "0x70d3908dbf2d4b16ddc3d0a957667f31a62af857",
-            "value": "0x32"
+            "value": "0x32",
+            "gas":"0x64",
+            "gasPrice":"0x3b9aca00"
         }
     ]
 }'

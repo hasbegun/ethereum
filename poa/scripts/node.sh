@@ -30,6 +30,7 @@ echo "Netrestrict: $NETRESTRICT"
 echo "Network ID: $NETWORKID"
 echo "Bootnode URL: $BOOTNODE_URL"
 
+# drop this option for prod.
 geth --datadir=$DATADIR \
      --bootnodes="$BOOTNODE_URL" \
      --networkid=$NETWORKID \
@@ -40,6 +41,7 @@ geth --datadir=$DATADIR \
      --http.corsdomain="*" \
      --unlock=$ADDRESSES \
      --password=/opt/config/master-password \
+     --allow-insecure-unlock \
      --verbosity 3
 
 
