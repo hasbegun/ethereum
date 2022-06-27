@@ -4,8 +4,6 @@ services:
   # The bootnode is the rendez-vous point for all other nodes.
   eth-bootnode:
     image: ethereum/client-go:alltools-v1.10.18
-    env_file:
-      - .env
     restart: unless-stopped
     ports:
       - 30303:30303
@@ -22,8 +20,6 @@ services:
   # but it's not sealing.
   eth-node:
     image: ethereum/client-go:alltools-v1.10.18
-    env_file:
-      - .env
     restart: unless-stopped
     depends_on:
       - eth-bootnode
@@ -41,8 +37,6 @@ services:
   # Miner nodes are workers that commit blocks constantly.
   eth-sealer:
     image: ethereum/client-go:alltools-v1.10.18
-    env_file:
-      - .env
     restart: unless-stopped
     depends_on:
       - eth-node
@@ -60,4 +54,4 @@ networks:
     driver: bridge
     ipam:
       config:
-      - subnet: ${NETRESTRICT}
+      - subnet: 172.16.254.0/28
