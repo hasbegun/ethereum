@@ -1,0 +1,11 @@
+
+Your new key was generated
+
+Public address of the key:   0x5e234a32186B1b366bb0bb6367425dDaf1b07a03
+Path of the secret key file: /opt/config/accounts/keystore/UTC--2022-06-17T08-12-44.492529412Z--5e234a32186b1b366bb0bb6367425ddaf1b07a03
+
+- You can share your public address with anyone. Others need it to interact with you.
+- You must NEVER share the secret key with anyone! The key controls access to your funds!
+- You must BACKUP your key file! Without the key, it's impossible to access account funds!
+- You must REMEMBER your password! Without the password, it's impossible to decrypt the key!
+

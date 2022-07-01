@@ -1,0 +1,78 @@
+version: "3"
+
+services:
+  # The bootnode is the rendez-vous point for all other nodes.
+  eth-bootnode:
+    image: ethereum/client-go:alltools-v1.10.18
+    restart: unless-stopped
+    ports:
+      - 30303:30303
+    volumes:
+      - ./scripts:/opt/scripts/:ro
+      - ./config/eth:/opt/config/:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./data/bootnode:/opt/ethereum:rw
+    command: /opt/scripts/bootnode.sh
+    networks:
+      priv-eth-net:
+
+  # The node container is our entry point to issue RPC commands
+  # but it's not sealing.
+  eth-node:
+    image: ethereum/client-go:alltools-v1.10.18
+    restart: unless-stopped
+    env_file:
+      -  ./envs/eth.env
+    depends_on:
+      - eth-bootnode
+    ports:
+      - 8544-8546:8544-8546
+    volumes:
+      - ./scripts:/opt/scripts/:ro
+      - ./config/eth:/opt/config/:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./data/node:/opt/ethereum:rw
+    command: /opt/scripts/node.sh ${VHOSTS}
+    networks:
+      priv-eth-net:
+
+  # Miner nodes are workers that commit blocks constantly.
+  eth-sealer:
+    image: ethereum/client-go:alltools-v1.10.18
+    restart: unless-stopped
+    depends_on:
+      - eth-node
+    volumes:
+      - ./scripts:/opt/scripts/:ro
+      - ./config/eth:/opt/config/:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./data/sealer:/opt/ethereum:rw
+    command: /opt/scripts/sealer.sh 0x0d2B767809d5dd9a62CAD1DA22Ac9401147cC1f0
+    networks:
+      priv-eth-net:
+
+  # nginx setup.
+  eth-nginx:
+    image: nginx:1.21-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - eth-bootnode
+      - eth-node
+      - eth-sealer
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/nginx/eth4438.conf:/etc/nginx/http.d/eth4438.conf
+      - ./config/nginx/eth4438.key:/etc/ssl/private/eth4438.key
+      - ./config/nginx/eth4438.crt:/etc/ssl/certs/eth4438.crt
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    networks:
+      priv-eth-net:
+
+networks:
+  priv-eth-net:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.16.254.0/28
