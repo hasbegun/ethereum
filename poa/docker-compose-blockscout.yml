@@ -24,13 +24,13 @@ services:
       - db:database
     command: 'mix do ecto.create, ecto.migrate, phx.server'
     extra_hosts:
-      - 'localhost:host-gateway'
+      - 'eth4438.innoxai.com:host-gateway'
     env_file:
       -  ./envs/common-blockscout.env
     environment:
         ETHEREUM_JSONRPC_VARIANT: 'geth'
         BLOCK_TRANSFORMER: 'clique'
-        ETHEREUM_JSONRPC_HTTP_URL: http://localhost:8545/
+        ETHEREUM_JSONRPC_HTTP_URL: http://eth4438.innoxai.com/
         DATABASE_URL: postgresql://postgres:@host.docker.internal:7432/blockscout?ssl=false
         ECTO_USE_SSL: 'false'
     ports:

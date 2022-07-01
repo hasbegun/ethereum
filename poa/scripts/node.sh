@@ -1,8 +1,14 @@
 #!/usr/bin/env ash
 source /opt/scripts/functions.sh
 
-DATADIR=/opt/ethereum
+if [ -z "$1" ]; then
+  VHOSTS="eth4438.innoxai.com"
+else
+  VHOSTS=$1
+fi
+echo "VHOST: $VHOSTS"
 
+DATADIR=/opt/ethereum
 for keydir in /opt/accounts/* ; do
   if [[ $keydir != "/opt/accounts/keystore" ]]; then
      ACCT_PUB_KEY=$(cat $keydir 2>&1 | grep "key:" | awk 'END {print $6}' | cut -c3-43)
@@ -39,6 +45,10 @@ geth --datadir=$DATADIR \
      --http --http.addr="0.0.0.0" \
      --http.api="eth,web3,net,admin,personal,debug,net,miner,txpool,clique" \
      --http.corsdomain="*" \
+     --http.vhosts="$VHOSTS" \
+     --graphql \
+     --graphql.vhosts="$VHOSTS" \
+     --graphql.corsdomain="*" \
      --unlock=$ADDRESSES \
      --password=/opt/config/master-password \
      --allow-insecure-unlock \
