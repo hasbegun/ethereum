@@ -22,7 +22,7 @@ services:
     image: ethereum/client-go:alltools-v1.10.18
     restart: unless-stopped
     env_file:
-      -  ./envs/eth.env
+      -  ./envs/eth-single.env
     depends_on:
       - eth-bootnode
     ports:
@@ -58,9 +58,9 @@ services:
       - eth-node
     restart: unless-stopped
     environment:
-      POSTGRES_PASSWORD: ''
-      POSTGRES_USER: 'postgres'
-      POSTGRES_HOST_AUTH_METHOD: 'trust'
+        POSTGRES_PASSWORD: ''
+        POSTGRES_USER: 'postgres'
+        POSTGRES_HOST_AUTH_METHOD: 'trust'
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
     ports:
@@ -80,14 +80,13 @@ services:
     extra_hosts:
       - 'eth4438.innoxai.com:host-gateway'
     env_file:
-      - ./envs/common-blockscout.env
-      - ./envs/eth.env
+      -  ./envs/common-blockscout.env
     environment:
-      ETHEREUM_JSONRPC_VARIANT: 'geth'
-      BLOCK_TRANSFORMER: 'clique'
-      ETHEREUM_JSONRPC_HTTP_URL: ${ETHEREUM_JSONRPC_HTTP_URL:-http://eth4438.innoxai.com/}
-      DATABASE_URL: postgresql://postgres:@host.docker.internal:7432/blockscout?ssl=false
-      ECTO_USE_SSL: 'false'
+        ETHEREUM_JSONRPC_VARIANT: 'geth'
+        BLOCK_TRANSFORMER: 'clique'
+        ETHEREUM_JSONRPC_HTTP_URL: ${ETHEREUM_JSONRPC_HTTP_URL:-http://eth4438.innoxai.com:8080/}
+        DATABASE_URL: postgresql://postgres:@host.docker.internal:7432/blockscout?ssl=false
+        ECTO_USE_SSL: 'false'
     ports:
       - 4000:4000
     networks:
@@ -99,8 +98,8 @@ services:
     image: nginx:1.21-alpine
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:8080"
+      - "4040:4040"
     depends_on:
       - eth-bootnode
       - eth-node
@@ -109,7 +108,7 @@ services:
       - eth-blockscout
     volumes:
       - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./config/nginx/eth4438.innoxai.com.conf:/etc/nginx/http.d/eth4438.innoxai.com.conf
+      - ./config/nginx/eth4438.innoxai.com-single.conf:/etc/nginx/http.d/eth4438.innoxai.com-single.conf
       - ./config/nginx/eth4438.innoxai.com.key:/etc/ssl/private/eth4438.innoxai.com.key
       - ./config/nginx/eth4438.innoxai.com.crt:/etc/ssl/certs/eth4438.innoxai.com.crt
       - ./config/nginx/blockscout.innoxai.com.key:/etc/ssl/private/blockscout.innoxai.com.key

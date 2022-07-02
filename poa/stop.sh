@@ -1,1 +1,1 @@
-docker compose -f docker-compose-blockscout.yml down
+docker compose -f docker-compose.yml down

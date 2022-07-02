@@ -41,9 +41,9 @@ if [ -z "$7" ]; then
 else
   CHAINNAME=$7
 fi
-CN=eth4438.$DOMAIN
-KEY=../poa/config/nginx/eth4438.key
-CRT=../poa/config/nginx/eth4438.crt
+CN=$CHAINNAME.$DOMAIN
+KEY=../poa/config/nginx/$CN.key
+CRT=../poa/config/nginx/$CN.crt
 
 if [ ! -f $KEY ] || [ ! -f $CRT ]; then
 openssl req -x509 -nodes -days 365 \
